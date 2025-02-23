@@ -1,4 +1,9 @@
-def rgb2dataframe(array: Union[List[List[int]], ndarray]) -> DataFrame:
+from typing import Union
+from numpy import ndarray
+import pandas as pd
+
+
+def rgb2dataframe(array: Union[list[list[int]], ndarray]) -> pd.DataFrame:
     """Convert RGB to dataframe. It is useful when we want to normalize the values.
     Notes: Using the normalized images causing the interval values
 
