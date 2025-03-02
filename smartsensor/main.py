@@ -4,25 +4,51 @@ from typing_extensions import Annotated
 
 from smartsensor.const import Degree, NormalizeMethod
 from smartsensor.logger import logger
+from smartsensor.process_image import process_image
 from smartsensor.e2e import end2end_pipeline
 
-app = typer.Typer(help="Smart Optical Sensor")
+
+app = typer.Typer(
+    help="Smart Optical Sensor: Using smartphone camera as sensor", add_completion=False
+)
 
 
 @app.command()
-def run(
-    train_image_data: str = typer.Option(help="Image train data folder"),
-    test_image_data: str = typer.Option(None, help="Image test data folder"),
-    concentration: str = typer.Option(
-        help="Image concentration for both train and test data"
+def model(
+    data: str = typer.Option(help="Csv file, output by the process"),
+    meta: str = typer.Option(
+        help="The metadata file, contains image, relative concentration, relative batch",
     ),
-    feature: str = typer.Option(
+    train_batches: str = typer.Option(
+        None,
+        help="Train batches, split by commna",
+    ),
+    test_batches: str = typer.Option(
+        None,
+        help="Test batches, split by commna",
+    ),
+    prefix: str = typer.Option(
+        None,
+        "--prefix",
+        help="Output prefix",
+    ),
+    features: str = typer.Option(
         "meanR,meanG,meanG,modeR,modeG,modeB",
-        "--feature",
+        "--features",
         help="Features used in model, separated by commas in string",
     ),
+    skip_feature_selection: bool = typer.Option(
+        False,
+        "--skip-feature-selection",
+        help="Skip feature selection",
+    ),
+    cv: int = typer.Option(
+        5,
+        "--cv",
+        help="Fold for cross validation",
+    ),
     test_size: float = typer.Option(
-        None, "--test-size", help="Test data size for splitting to train the model"
+        0.2, "--test-size", help="Test data size for splitting to train the model"
     ),
     norm: list[NormalizeMethod] = typer.Option(
         [NormalizeMethod.non],
@@ -39,21 +65,46 @@ def run(
     """
     logger.info("Starting Smart Optical Sensor model training...")
     logger.info("Your configuration is belowed")
-    logger.info(f"Train data folder: {train_data}")
-    logger.info(f"Features: {feature}")
+    logger.info(f"Data folder: {data}")
+    logger.info(f"Metadata: {meta}")
+    logger.info(f"Train batches: {train_batches}")
+    logger.info(f"Test batches: {test_batches}")
+    logger.info(f"Features: {features}")
+    logger.info(f"Skip feature selection: {skip_feature_selection}")
+    logger.info(f"Cross validation: {cv}")
     logger.info(f"Test size: {test_size}")
     logger.info(f"Normalization: {norm}")
     logger.info(f"Degree: {degree}")
     logger.info(f"Output folder: {out}")
 
-    if not os.path.exists(out):
-        logger.info(f"Output folder '{out}' does not exist!")
-        os.makedirs(out)
+    end2end_pipeline(
+        data=data,
+        metadata=meta,
+        features=features,
+        degree=degree,
+        skip_feature_selection=skip_feature_selection,
+        cv=cv,
+        train_batches=train_batches,
+        test_batches=test_batches,
+        outdir=out,
+        prefix=prefix,
+        test_size=test_size,
+    )
 
-    # Call your model function here
-    end2end_model(data, batch, feature, test_size, norm, degree, out)
 
-    logger.info("Model execution completed.")
+@app.command()
+def process(
+    data: str = typer.Option(help="Path to the image or folder of raw images"),
+    outdir: str = typer.Option(".", help="Folder to save processed images"),
+    kit: str = typer.Option(
+        "1.1.0",
+        help="The kit that has been used to capture image. By default, kit is used for ampiciline dataset",
+    ),
+):
+    """
+    Normalize the images to standardize RGB features.
+    """
+    process_image(data=data, outdir=outdir, kit=kit)
 
 
 if __name__ == "__main__":

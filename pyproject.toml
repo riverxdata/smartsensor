@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "smartsensor"
-version = "1.0.0"
+version = "1.1.0"
 description = "The sensor utilizes a smartphone camera to analyze and characterize chemical compounds."
 readme = "README.md"
 authors = ["Thanh-Giang (River) Tan Nguyen <nttg8100@gmail.com>", "Dung Cao <dung.cao@ttu.edu.vn>"]

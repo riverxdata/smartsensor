@@ -25,9 +25,7 @@ def get_features(outdir: str) -> str:
     for d_dir in data_dirs:
         processed_outdir = os.path.join(outdir, d_dir)
         input_path = os.path.join(processed_outdir, "*.csv")
-        rgb_path = os.path.join(
-            outdir, os.path.join(outdir, f"features_rgb_{d_dir}.csv")
-        )
+        rgb_path = os.path.join(outdir, f"features_rgb_{d_dir}.csv")
         imgs_path = glob.glob(input_path)
         if len(imgs_path) == 0:
             raise ValueError(
@@ -37,7 +35,6 @@ def get_features(outdir: str) -> str:
             res.write(
                 "image,meanB,meanG,meanR,modeB,modeG,modeR,stdevB,stdevG,stdevR\n"
             )
-            res_qual.write("image\n")
             for img_path in imgs_path:
                 img_id = os.path.basename(img_path.replace(".csv", ".jpg"))
                 # Load image

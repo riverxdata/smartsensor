@@ -1,4 +1,17 @@
-def train_regression(
+import os
+import pickle
+from typing import List
+import numpy as np
+import pandas as pd
+from pandas import DataFrame
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import RFECV
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from smartsensor.logger import logger
+
+
+def fit(
     train: DataFrame,
     features: List,
     degree: int,
@@ -22,13 +35,13 @@ def train_regression(
     y = train["concentration"].values.astype(float)
     # cv = None
     if skip_feature_selection:
-        print("Skip feature selection")
+        logger.info("Skip feature selection")
         selected_features = features
         X_selected = x
     else:
         # Using Random Forest Regressor as the estimator for RFECV
         estimator = RandomForestRegressor(random_state=1)
-        print(f"Feature selection using the  the model using CV={cv}")
+        logger.info(f"Feature selection using the  the model using CV={cv}")
         rfe_selector = RFECV(estimator, step=1, cv=cv)
         rfe_selector = rfe_selector.fit(x, y)
         # Select the important features from the original feature set
@@ -60,14 +73,13 @@ def train_regression(
         # Write CV
         if cv is not None:
             f.write(f"Feature selection using the  the model using CV={cv}\n")
-        print("#" * 100)
-        print("Your selected features are:\n")
-        f.write("Selected features:\n")
+        logger.info("Your selected features are:")
+        logger.info(",".join(selected_features))
+
         # write features
+        f.write("Selected features:\n")
         for feature in selected_features:
-            print(feature)
             f.write(f"{feature}\n")
-        print("#" * 100)
         # write model
         f.write("Model:\n")
         # Create a dictionary with feature names and coefficients
@@ -82,17 +94,17 @@ def train_regression(
         # Print the coefficients and intercept with feature names
         fomular = "y = "
         for feature, coefficient in coefficients_dict.items():
-            # if feature != "Intercept":
-            fomular += f" + {coefficient}x{'x'.join(feature.split())}"
-            # else:
-            #     fomular += f" + {coefficient}"
+            if feature != "Intercept":
+                fomular += f" + {coefficient}x{'x'.join(feature.split())}"
+            else:
+                fomular += f" + {coefficient}"
         fomular += f" + {intercept}"
         f.write(fomular)
-        print("Your model is:\n", fomular)
+        logger.info("Your model is:")
+        logger.info(fomular)
     res = np.round(np.dot(X_selected_poly, coefficients) + intercept, 2)
     model_res = np.round(clf.predict(X_selected_poly), 2)
-    assert sorted(list(res)) == sorted(
-        list(model_res)
-    ), "Incorrect model, the fomular is not correct vs the predict function"  # noqa
-    # Save the selected features names
+    assert sorted(list(res)) == sorted(list(model_res)), logger.error(
+        "Incorrect model, the fomular is not correct vs the predict function"
+    )
     return clf, selected_features
