@@ -2,7 +2,12 @@
 This project utilizes a smartphone camera and machine learning techniques to analyze and characterize chemical compounds. It has been published in:
 Dang, K.P.T., Nguyen, T.T.G., Cao, T.D., Le, V.D., Dang, C.H., Duy, N.P.H., Phuong, P.T.T., Chi, T.T.K., & Nguyen, T.D. (2024). Biogenic fabrication of a gold nanoparticle sensor for detection of Fe³⁺ ions using a smartphone and machine learning. RSC Advances, 14(29), 20466-20478.
 
-## Ampicilline dataset
+## Installization
+Install this python package via github repo
+```
+pip install git+https://github.com/riverxdata/smartsensor.git@main
+```
+## Ampicilline kit
 Download the dataset
 https://drive.google.com/file/d/1b_yxZTaza7Remr_nD9S8LAWLSbV-x3Sb/view?usp=sharing
 ```
