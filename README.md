@@ -3,7 +3,7 @@ This project utilizes a smartphone camera and machine learning techniques to ana
 Dang, K.P.T., Nguyen, T.T.G., Cao, T.D., Le, V.D., Dang, C.H., Duy, N.P.H., Phuong, P.T.T., Chi, T.T.K., & Nguyen, T.D. (2024). Biogenic fabrication of a gold nanoparticle sensor for detection of Fe³⁺ ions using a smartphone and machine learning. RSC Advances, 14(29), 20466-20478.
 
 ## Ampicilline dataset
-Download the dataset and but it to the correct folder like this
+Download the dataset
 https://drive.google.com/file/d/1b_yxZTaza7Remr_nD9S8LAWLSbV-x3Sb/view?usp=sharing
 ```
 data
