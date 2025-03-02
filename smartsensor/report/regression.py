@@ -58,3 +58,17 @@ def linear_regression_visualization(
     train_dataset = os.path.basename(train_dataset).split(".")[0]
     plt.savefig(f"{outdir}/{train_dataset}_{feature}_linear_regression.pdf")
     plt.savefig(f"{outdir}/{train_dataset}_{feature}_linear_regression.png")
+
+
+def visualization(
+    features: List, train: DataFrame, train_concentration: str, outdir: str
+):
+    # visualization in train only
+    for feature in features:
+        linear_regression_visualization(
+            df=train,
+            feature=feature,
+            target="concentration",
+            train_dataset=train_concentration,
+            outdir=outdir,
+        )
