@@ -49,3 +49,24 @@ def evaluate_metrics(
     )
 
     return (metric, detail)
+
+
+def aggregate_replication_metrics(metrics: pd.DataFrame):
+    grouped = metrics.groupby("data")
+    summary = []
+
+    for name, group in grouped:
+        r2_mean, r2_std = group["r2"].mean(), group["r2"].std()
+        rmse_mean, rmse_std = group["rmse"].mean(), group["rmse"].std()
+        mae_mean, mae_std = group["mae"].mean(), group["mae"].std()
+
+        summary.append(
+            {
+                "Dataset": name,
+                "R2": f"{r2_mean:.4f} ± {r2_std:.4f}",
+                "RMSE": f"{rmse_mean:.4f} ± {rmse_std:.4f}",
+                "MAE": f"{mae_mean:.4f} ± {mae_std:.4f}",
+            }
+        )
+    summary_df = pd.DataFrame(summary)
+    return summary_df

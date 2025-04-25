@@ -19,14 +19,6 @@ def model(
     meta: str = typer.Option(
         help="The metadata file, contains image, relative concentration, relative batch",
     ),
-    train_batches: str = typer.Option(
-        None,
-        help="Train batches, split by commna",
-    ),
-    test_batches: str = typer.Option(
-        None,
-        help="Test batches, split by commna",
-    ),
     prefix: str = typer.Option(
         None,
         "--prefix",
@@ -38,7 +30,7 @@ def model(
         help="Features used in model, separated by commas in string",
     ),
     skip_feature_selection: bool = typer.Option(
-        False,
+        True,
         "--skip-feature-selection",
         help="Skip feature selection",
     ),
@@ -67,8 +59,6 @@ def model(
     logger.info("Your configuration is belowed")
     logger.info(f"Data folder: {data}")
     logger.info(f"Metadata: {meta}")
-    logger.info(f"Train batches: {train_batches}")
-    logger.info(f"Test batches: {test_batches}")
     logger.info(f"Features: {features}")
     logger.info(f"Skip feature selection: {skip_feature_selection}")
     logger.info(f"Cross validation: {cv}")
@@ -84,8 +74,6 @@ def model(
         degree=degree,
         skip_feature_selection=skip_feature_selection,
         cv=cv,
-        train_batches=train_batches,
-        test_batches=test_batches,
         outdir=out,
         prefix=prefix,
         test_size=test_size,
