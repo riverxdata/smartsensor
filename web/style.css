@@ -1,7 +1,10 @@
+/* Page background */
 body { background: #f6fafd; }
-.main-title {
-    display: none;
-}
+
+/* Hide main title */
+.main-title { display: none; }
+
+/* Banner */
 .banner {
     background: linear-gradient(90deg, #e3f2fd 0%, #90caf9 100%);
     border-radius: 18px;
@@ -13,12 +16,14 @@ body { background: #f6fafd; }
     align-items: center;
     justify-content: center;
 }
+
+/* Banner title */
 .banner-title {
     color: #1976d2;
     font-size: 38px;
 }
 
-/* Custom CSS for Predict button */
+/* Predict button (old style) */
 div.stButton > button:first-child {
     background-color: white;
     color: #e75480;
@@ -30,13 +35,37 @@ div.stButton > button:first-child {
     margin-top: 10px;
     margin-bottom: 20px;
 }
+
 div.stButton > button:first-child:hover {
     background-color: #ffe6ef;
     color: #c2185b;
     border: 3px solid #c2185b;
 }
 
-/* Style fixed size for selected images */
+/* Predict button (modern style) */
+div.stButton > button:first-child {
+    background: linear-gradient(90deg, #e3f2fd 0%, #90caf9 100%);
+    color: #222;
+    border: none !important;
+    border-radius: 16px;
+    font-size: 28px;
+    font-weight: 700;
+    padding: 18px 64px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    box-shadow: none !important;
+    transition: none !important;
+    letter-spacing: 1px;
+}
+
+div.stButton > button:first-child:hover {
+    background: linear-gradient(90deg, #b3e5fc 0%, #64b5f6 100%);
+    color: #111;
+    box-shadow: 0 6px 36px rgba(33,161,255,0.22);
+    filter: brightness(1.08);
+}
+
+/* Selected image fixed size */
 .selected-image img, img.selected, .stImage img {
     width: 300px !important;
     height: 300px !important;
@@ -44,35 +73,37 @@ div.stButton > button:first-child:hover {
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(33,161,255,0.10);
     background: #fff;
+    transition: none !important;
 }
 
-/* Footer style */
+/* Footer */
 .footer {
-    color: #888;
     text-align: center;
-    font-size: 16px;
-    margin-top: 30px;
-    letter-spacing: 1.5px;
-    text-shadow: 0 2px 12px rgba(33,161,255,0.08);
+    color: #888;
+    margin-top: 16px; 
+    font-size: 18px;
 }
+
+/* Streamlit input */
 .stTextInput > div > input {
     border: 2px solid #1976d2;
     border-radius: 8px;
     font-size: 20px;
     padding: 8px 16px;
 }
+
 div.stButton > button:first-child {
     background: linear-gradient(90deg, #e3f2fd 0%, #90caf9 100%);
     color: #222;
-    border: none;
+    border: none !important;
     border-radius: 16px;
     font-size: 28px;
     font-weight: 700;
     padding: 18px 64px;
     margin-top: 24px;
-    margin-bottom: 32px;
-    box-shadow: 0 4px 24px rgba(66,165,245,0.13);
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    margin-bottom: 8px;
+    box-shadow: none !important;
+    transition: none !important;
     letter-spacing: 1px;
 }
 div.stButton > button:first-child:hover {
@@ -84,6 +115,6 @@ div.stButton > button:first-child:hover {
 .footer {
     text-align: center;
     color: #888;
-    margin-top: 40px;
+    margin-top: 16px; 
     font-size: 18px;
 }
