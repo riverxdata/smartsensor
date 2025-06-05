@@ -2,30 +2,52 @@ import streamlit as st
 
 st.set_page_config(page_title="SmartSensor", layout="centered")
 
-# Đọc và nhúng CSS từ file style.css
+# Read and embed CSS from style.css
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Banner duy nhất
+# Unique banner
 st.markdown("""
 <div class='banner'>
   <span class='banner-title'>SmartSensor BioAI</span>
 </div>
 """, unsafe_allow_html=True)
 
-# Input fields
-sepal_length = st.text_input("Sepal Length", value="1")
-sepal_width = st.text_input("Sepal Width", value="2")
-petal_length = st.text_input("Petal Length", value="3")
-petal_width = st.text_input("Petal Width", value="4")
+# Get the list of images from the img directory and allow user upload
+import os
+from PIL import Image
 
-# Predict button with custom style
+img_dir = "img"
+os.makedirs(img_dir, exist_ok=True)
+
+# File uploader for user to upload new image
+uploaded_file = st.file_uploader("Upload an image (jpg, png, jpeg, bmp)", type=["jpg", "jpeg", "png", "bmp"])
+if uploaded_file is not None:
+    # Open image
+    image = Image.open(uploaded_file)
+    # Resize to max 300x300, keep aspect ratio
+    image.thumbnail((300, 300))
+    # Save to img directory
+    save_path = os.path.join(img_dir, uploaded_file.name)
+    image.save(save_path)
+    st.success(f"Image saved as {uploaded_file.name} (resized)")
+
+# List images in img directory (including just-uploaded)
+img_files = [f for f in os.listdir(img_dir) if f.lower().endswith((".jpg", ".jpeg", ".png", ".bmp"))]
+
+if img_files:
+    selected_img = st.selectbox("Select an image to predict concentration", img_files)
+    if selected_img:
+        img_path = os.path.join(img_dir, selected_img)
+        st.image(img_path, caption=f"Selected image: {selected_img}", width=300)
+
 predict_btn = st.button("Predict")
 
 result = None
-if predict_btn:
-    # Dummy model: just output a static value or a list
-    result = [2]
+if predict_btn and selected_img:
+    # Here you can call your image processing model, for example:
+    # result = predict_concentration(img_path)
+    result = [2]  # Dummy output
 
 if result is not None:
     st.markdown(f"""
@@ -37,26 +59,5 @@ if result is not None:
     """, unsafe_allow_html=True)
 
 # Custom CSS for Predict button
-st.markdown("""
-    <style>
-    div.stButton > button:first-child {
-        background-color: white;
-        color: #e75480;
-        border: 3px solid #e75480;
-        border-radius: 8px;
-        font-size: 20px;
-        font-weight: bold;
-        padding: 8px 32px;
-        margin-top: 10px;
-        margin-bottom: 20px;
-    }
-    div.stButton > button:first-child:hover {
-        background-color: #ffe6ef;
-        color: #c2185b;
-        border: 3px solid #c2185b;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # Footer
 st.markdown("<div class='footer'>Created by @Team SmartSensor.</div>", unsafe_allow_html=True)

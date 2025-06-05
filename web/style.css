@@ -16,9 +16,32 @@ body { background: #f6fafd; }
 .banner-title {
     color: #1976d2;
     font-size: 38px;
-    font-weight: 800;
+}
+
+/* Custom CSS for Predict button */
+div.stButton > button:first-child {
+    background-color: white;
+    color: #e75480;
+    border: 3px solid #e75480;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 8px 32px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+div.stButton > button:first-child:hover {
+    background-color: #ffe6ef;
+    color: #c2185b;
+    border: 3px solid #c2185b;
+}
+
+/* Footer style */
+.footer {
+    color: #888;
     text-align: center;
-    margin: 0;
+    font-size: 16px;
+    margin-top: 30px;
     letter-spacing: 1.5px;
     text-shadow: 0 2px 12px rgba(33,161,255,0.08);
 }
