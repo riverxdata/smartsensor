@@ -4,8 +4,10 @@ import streamlit as st
 st.set_page_config(page_title="SmartSensor", layout="centered")
 
 # Load and apply custom CSS
-with open("style.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+import os
+if os.path.exists("style.css"):
+    with open("style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Show banner title
 st.markdown("""
@@ -42,21 +44,35 @@ if img_files:
 # --- Prediction button and output ---
 predict_btn = st.button("Predict")
 
-result = None
-if predict_btn and selected_img:
-    # Call prediction model here
-    # result = predict_concentration(img_path)
-    result = [2]  # Dummy output
+# Hiển thị toàn bộ kết quả model khi user bấm Predict
+RESULT_DIR = "data/ampicilline/ip_1_10_delta"
+RESULT_FILES = [
+    "full_model_infor.txt",
+    "full_RGB_model.sav",
+    "metrics.csv",
+    "sensor.log",
+    "testsize_0.2_model_infor.txt",
+    "testsize_0.2_RGB_model.sav",
+    "test_testsize_0.2_.csv",
+    "train_testsize_0.2.csv"
+]
 
-# Show prediction result
-if result is not None:
-    st.markdown(f"""
-    <div style='background-color:#d4f7d4; padding: 20px; border-radius: 5px; margin-top: 20px;'>
-        <span style='color:#217346; font-size: 22px; font-weight: 500;'>
-            The output is {result}
-        </span>
-    </div>
-    """, unsafe_allow_html=True)
+if predict_btn:
+    st.markdown("## Kết quả dự đoán/model")
+    for fname in RESULT_FILES:
+        fpath = os.path.join(RESULT_DIR, fname)
+        st.markdown(f"### {fname}")
+        if os.path.exists(fpath):
+            if fname.endswith((".txt", ".csv", ".log")):
+                with open(fpath, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read()
+                st.code(content, language="text")
+            else:
+                with open(fpath, "rb") as f:
+                    btn_label = f"Tải về {fname}"
+                    st.download_button(btn_label, f, file_name=fname)
+        else:
+            st.warning(f"Không tìm thấy file: {fname}")
 
 # Show footer
 st.markdown("<div class='footer'>Created by @Team SmartSensor.</div>", unsafe_allow_html=True)
