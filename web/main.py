@@ -44,7 +44,7 @@ if img_files:
 # --- Prediction button and output ---
 predict_btn = st.button("Predict")
 
-# Hiển thị toàn bộ kết quả model khi user bấm Predict
+# Display all model results when user clicks Predict
 RESULT_DIR = "data/ampicilline/ip_1_10_delta"
 RESULT_FILES = [
     "full_model_infor.txt",
@@ -58,7 +58,7 @@ RESULT_FILES = [
 ]
 
 if predict_btn:
-    st.markdown("## Kết quả dự đoán/model")
+    st.markdown("## Prediction/Model Results")
     for fname in RESULT_FILES:
         fpath = os.path.join(RESULT_DIR, fname)
         st.markdown(f"### {fname}")
@@ -69,10 +69,10 @@ if predict_btn:
                 st.code(content, language="text")
             else:
                 with open(fpath, "rb") as f:
-                    btn_label = f"Tải về {fname}"
+                    btn_label = f"Download {fname}"
                     st.download_button(btn_label, f, file_name=fname)
         else:
-            st.warning(f"Không tìm thấy file: {fname}")
+            st.warning(f"File not found: {fname}")
 
 # Show footer
 st.markdown("<div class='footer'>Created by @Team SmartSensor.</div>", unsafe_allow_html=True)

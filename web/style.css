@@ -92,6 +92,7 @@ div.stButton > button:first-child:hover {
     padding: 8px 16px;
 }
 
+/* Predict button (modern style) */
 div.stButton > button:first-child {
     background: linear-gradient(90deg, #e3f2fd 0%, #90caf9 100%);
     color: #222;
@@ -106,12 +107,15 @@ div.stButton > button:first-child {
     transition: none !important;
     letter-spacing: 1px;
 }
+
 div.stButton > button:first-child:hover {
     background: linear-gradient(90deg, #b3e5fc 0%, #64b5f6 100%);
     color: #111;
     box-shadow: 0 6px 36px rgba(33,161,255,0.22);
     filter: brightness(1.08);
 }
+
+/* Footer */
 .footer {
     text-align: center;
     color: #888;
