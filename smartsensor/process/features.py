@@ -20,7 +20,7 @@ def get_features(outdir: str) -> str:
     data_dirs = [
         "delta_normalized_roi",
         "ratio_normalized_roi",
-        "raw_roi",
+        "raw_normalized_roi",
     ]
     for d_dir in data_dirs:
         processed_outdir = os.path.join(outdir, d_dir)

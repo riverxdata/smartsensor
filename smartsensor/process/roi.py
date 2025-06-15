@@ -63,7 +63,7 @@ def get_roi_background(
         data (str): The path contain frame images
         outdir (str): The outdir
     """
-    roi_path = os.path.join(outdir, "raw_roi")
+    roi_path = os.path.join(outdir, "raw_normalized_roi")
     bg_path = os.path.join(outdir, "background")
 
     os.makedirs(roi_path, exist_ok=True)
@@ -87,9 +87,6 @@ def get_roi_background(
         )
 
         # background
-        quarter_size = half_size // 2
-        background = image[
-            center - half_size : center + half_size, half_size : half_size * 3
-        ]
+        background = image[center - half_size : center + half_size, 50:100]
         cv2.imwrite(os.path.join(bg_path, file_name), background)
     return roi_path, bg_path
