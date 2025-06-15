@@ -42,13 +42,8 @@ def model(
     test_size: float = typer.Option(
         0.2, "--test-size", help="Test data size for splitting to train the model"
     ),
-    norm: list[NormalizeMethod] = typer.Option(
-        [NormalizeMethod.non],
-        "--norm",
-        help="Normalization method.",
-    ),
-    degree: list[Degree] = typer.Option(
-        [Degree.first], "--degree", help="Degree of polynomial regression"
+    degree: list[int] = typer.Option(
+        [2], "--degree", help="Degree of polynomial regression"
     ),
     out: str = typer.Option(".", help="Folder to save model"),
 ):
@@ -58,18 +53,15 @@ def model(
     logger.info("Starting Smart Optical Sensor model training...")
     logger.info("Your configuration is belowed")
     logger.info(f"Data folder: {data}")
-    logger.info(f"Metadata: {meta}")
     logger.info(f"Features: {features}")
     logger.info(f"Skip feature selection: {skip_feature_selection}")
     logger.info(f"Cross validation: {cv}")
     logger.info(f"Test size: {test_size}")
-    logger.info(f"Normalization: {norm}")
     logger.info(f"Degree: {degree}")
     logger.info(f"Output folder: {out}")
 
     end2end_pipeline(
         data=data,
-        metadata=meta,
         features=features,
         degree=degree,
         skip_feature_selection=skip_feature_selection,

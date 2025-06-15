@@ -12,7 +12,6 @@ warnings.filterwarnings("ignore", message="X does not have valid feature names*"
 
 def end2end_pipeline(
     data: str,
-    metadata: str,
     features: str,
     degree: int,
     skip_feature_selection: bool,
@@ -24,19 +23,21 @@ def end2end_pipeline(
 ):
     metrics = []
     features = features.split(",")
-    degree = int(degree[0].value)
+    degree = int(degree)
     data_df = pd.read_csv(data)
-    meta_df = pd.read_csv(metadata)
-    batches = meta_df["batch"].unique()
-    meta_data = meta_df.merge(data_df, on="image")
-    meta_data.reset_index(drop=True)
+    data_df["batch"] = data_df["image"].apply(
+        lambda x: x.split("_")[-1].split(".jpg")[0]
+    )
+    data_df["concentration"] = data_df["image"].apply(lambda x: x.split("-")[0])
+    batches = data_df["batch"].unique()
+    data_df.reset_index(drop=True)
     with tempfile.TemporaryDirectory() as tmpdirname:
         for rep in range(1, replication + 1):
             logger.info(f"Replication {rep}")
 
             # split data
             train, test, prefix = split_data(
-                meta_data=meta_data,
+                meta_data=data_df,
                 outdir=outdir,
                 prefix=prefix,
                 test_size=test_size,
@@ -80,7 +81,7 @@ def end2end_pipeline(
     # use all data for training to use in real application
     # train
     train, test, prefix = split_data(
-        meta_data=meta_data,
+        meta_data=data_df,
         outdir=outdir,
         prefix=prefix,
         test_size=0,
