@@ -8,12 +8,14 @@ from numpy import ndarray
 from smartsensor.process.rgb2dataframe import rgb2dataframe
 from smartsensor.const import THRESHOLD_DELTA, THRESHOLD_RATIO
 from smartsensor.logger import logger
+import json
 
 
 def normalize(
     raw_roi: str,
     background: str,
     outdir: str,
+    lum: list = None,
 ) -> None:
     """Balance image
 
@@ -29,29 +31,34 @@ def normalize(
     os.makedirs(os.path.join(outdir, "delta_normalized_roi"), exist_ok=True)
     failed_ratio_file = os.path.join(outdir, "failed_ratio.csv")
     failed_delta_file = os.path.join(outdir, "failed_delta.csv")
-    lum = None
+
+    # Calculate luminance as the average mean of each channel
+    if not lum:
+        # get average value of background to normalize
+        channels = [[], [], []]  # B, G, R
+
+        for path in glob.glob(os.path.join(raw_roi, "*.jpg")):
+            bg_path = path.replace("raw_roi", "background")
+            bg_img = cv2.imread(bg_path)
+            # Append mean of each channel
+            for i in range(3):  # B=0, G=1, R=2
+                channels[i].append(np.mean(bg_img[:, :, i]))
+        lum = [np.mean(c) for c in channels]
+
+    logger.info(f"Processing raw roi image using lum: {lum}")
+
+    with open(os.path.join(outdir, "config.json"), "w") as f:
+        json.dump({"lum": lum}, f)
     with open(failed_ratio_file, "w") as f_ratio, open(
         failed_delta_file, "w"
     ) as f_delta:
         f_ratio.write("image\n")
         f_delta.write("image\n")
+
         for image_location in glob.glob(os.path.join(raw_roi, "*.jpg")):
             file_name = os.path.basename(image_location)
             raw_roi = cv2.imread(image_location)
             background = cv2.imread(image_location.replace("raw_roi", "background"))
-
-            # get first background as constant
-            if not lum:
-                lum = [
-                    np.mean(background[:, :, 0]),
-                    np.mean(background[:, :, 1]),
-                    np.mean(background[:, :, 2]),
-                ]
-                logger.info(
-                    f"Using first image : {image_location} as standard background"
-                )
-                logger.info(f"Const value are: {lum}")
-
             logger.info(f"Processing raw roi image via csv file: {image_location}")
             # normalize the image
             is_failed_delta, is_failed_ratio = run_normalize(
@@ -98,6 +105,7 @@ def normalize_ratio(
     ratio_normalized_roi["B"] *= ratioB
     ratio_normalized_roi["G"] *= ratioG
     ratio_normalized_roi["R"] *= ratioR
+    ratio_normalized_roi = ratio_normalized_roi.astype(np.int32)
     ratio_normalized_roi.to_csv(
         os.path.join(outdir, "ratio_normalized_roi", csv_name),
         index=False,
@@ -108,6 +116,7 @@ def normalize_ratio(
     tmp[:, :, 0] *= ratioB
     tmp[:, :, 1] *= ratioG
     tmp[:, :, 2] *= ratioR
+    tmp = tmp.astype(np.int32)
     tmp_file = os.path.join(outdir, "ratio_normalized_roi", file_name)
     cv2.imwrite(tmp_file, tmp)
 
@@ -150,11 +159,15 @@ def normalize_delta(
     delta_normalized_roi["B"] += deltaB
     delta_normalized_roi["G"] += deltaG
     delta_normalized_roi["R"] += deltaR
+
     # csv
+    delta_normalized_roi = delta_normalized_roi.astype(np.int32)
+
     delta_normalized_roi.to_csv(
         os.path.join(outdir, "delta_normalized_roi", csv_name),
         index=False,
     )
+
     # image
     tmp_file = os.path.join(outdir, "delta_normalized_roi", file_name)
     cv2.imwrite(tmp_file, tmp)

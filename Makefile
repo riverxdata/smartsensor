@@ -6,6 +6,7 @@ process_image:
 
 modeling:
 	smartsensor model \
+		--degree 1 \
 		--data data/ampicilline/ip_1_10/features_rgb_raw_roi.csv \
 		--meta data/ampicilline/ip_1_10/information.csv \
 		--out data/ampicilline/ip_1_10
@@ -13,6 +14,7 @@ modeling:
 modeling_ratio:
 	smartsensor model \
 		--norm ratio \
+		--degree 1 \
 		--data data/ampicilline/ip_1_10/features_rgb_raw_roi.csv \
 		--meta data/ampicilline/ip_1_10/information.csv \
 		--out data/ampicilline/ip_1_10_ratio

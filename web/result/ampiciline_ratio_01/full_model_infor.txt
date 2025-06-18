@@ -1,0 +1,5 @@
+Feature selection using the  the model using CV=5
+Selected features:
+meanR,meanG,meanB,modeR,modeG,modeB
+Model:
+y =  + 0.0x1 + 1.0527066862816647xmeanR + -0.011228544201432045xmeanG + -0.8984895848922093xmeanB + -0.5529743181894706xmodeR + -0.11113327203916001xmodeG + 0.638853315922282xmodeB + -29.014888883641575
