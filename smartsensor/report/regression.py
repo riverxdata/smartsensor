@@ -61,7 +61,7 @@ def linear_regression_visualization(
 
 
 def visualization(
-    features: List, train: DataFrame, train_concentration: str, outdir: str
+    features: list, train: pd.DataFrame, train_concentration: str, outdir: str
 ):
     # visualization in train only
     for feature in features:

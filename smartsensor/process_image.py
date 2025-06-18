@@ -1,13 +1,10 @@
-import math
-import numpy as np
-from typing import Callable, List, Tuple
 from smartsensor.process.roi import get_r2frame, get_roi_background
 from smartsensor.process.normalize import normalize
 from smartsensor.process.features import get_features
 from smartsensor.logger import logger
 
 
-def process_image(data: str, outdir: str, kit: str = "1.1.0") -> None:
+def process_image(data: str, outdir: str, kit: str = "1.1.0", lum=None) -> None:
     """Processing image
 
     Args:
@@ -36,11 +33,21 @@ def process_image(data: str, outdir: str, kit: str = "1.1.0") -> None:
 
     # balance
     logger.info("Balance image")
-    normalize(
-        raw_roi=raw_roi_path,
-        background=bg_path,
-        outdir=outdir,
-    )
+    if lum:
+        logger.info(f"Use lum from argument:{lum}")
+        normalize(
+            raw_roi=raw_roi_path,
+            background=bg_path,
+            outdir=outdir,
+            lum=lum,
+        )
+    else:
+        normalize(
+            raw_roi=raw_roi_path,
+            background=bg_path,
+            outdir=outdir,
+        )
+
     logger.info("Complete balance image")
     # extract features
     logger.info("Extract feature")

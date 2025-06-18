@@ -76,12 +76,13 @@ def fit(
         logger.info("Your selected features are:")
         logger.info(",".join(selected_features))
 
-        # write features
+        # Write features
         f.write("Selected features:\n")
-        for feature in selected_features:
-            f.write(f"{feature}\n")
-        # write model
+        f.write(f"{','.join(selected_features)}\n")
+
+        # Write model
         f.write("Model:\n")
+
         # Create a dictionary with feature names and coefficients
         coefficients = clf.coef_
         intercept = clf.intercept_

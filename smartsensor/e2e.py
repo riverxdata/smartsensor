@@ -6,13 +6,15 @@ import pandas as pd
 import os
 import tempfile
 import warnings
+import json
 
 warnings.filterwarnings("ignore", message="X does not have valid feature names*")
 
 
 def end2end_pipeline(
     data: str,
-    metadata: str,
+    kit: str,
+    norm: str,
     features: str,
     degree: int,
     skip_feature_selection: bool,
@@ -20,23 +22,23 @@ def end2end_pipeline(
     outdir: str,
     prefix: str,
     test_size: float = 0.2,
-    replication: int = 100,
+    replication: int = 1000,
 ):
+
     metrics = []
     features = features.split(",")
-    degree = int(degree[0].value)
-    data_df = pd.read_csv(data)
-    meta_df = pd.read_csv(metadata)
-    batches = meta_df["batch"].unique()
-    meta_data = meta_df.merge(data_df, on="image")
-    meta_data.reset_index(drop=True)
-    with tempfile.TemporaryDirectory() as tmpdirname:
+    degree = int(degree)
+    data_path = os.path.join(data, f"features_rgb_{norm}_normalized_roi.csv")
+
+    data_df = pd.read_csv(data_path)
+    data_df.reset_index(drop=True)
+    with tempfile.TemporaryDirectory() as tmpdirname:  # noqa
         for rep in range(1, replication + 1):
             logger.info(f"Replication {rep}")
 
             # split data
             train, test, prefix = split_data(
-                meta_data=meta_data,
+                meta_data=data_df,
                 outdir=outdir,
                 prefix=prefix,
                 test_size=test_size,
@@ -80,7 +82,7 @@ def end2end_pipeline(
     # use all data for training to use in real application
     # train
     train, test, prefix = split_data(
-        meta_data=meta_data,
+        meta_data=data_df,
         outdir=outdir,
         prefix=prefix,
         test_size=0,
@@ -101,3 +103,16 @@ def end2end_pipeline(
     test_metric["features"] = ",".join(selected_features)
     metric = pd.concat([train_metric, test_metric], axis=0)
     metrics.append(metric)
+
+    # write config to use for prediction later
+    config_path = os.path.join(outdir, "config.json")
+    config = {}
+    config["features"] = selected_features
+    config["normalization"] = norm
+    config["degree"] = degree
+    config["kit"] = kit
+    with open(config_path, "w") as f:
+        json.dump(config, f, indent=4)
+    logger.info(f"Saved config to: {config_path}")
+
+    return data_df, config_path, metrics

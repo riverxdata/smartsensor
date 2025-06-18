@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from smartsensor.logger import logger
 
 
 def split_data(
@@ -25,8 +24,8 @@ def split_data(
     test_data = pd.DataFrame()
     # split dataset by batch equally
     if test_size != 0:
-        for dataset_name, group in meta_data.groupby("batch"):
-            train_subset, test_subset = train_test_split(meta_data, test_size=test_size)
+        for dataset_name, group_df in meta_data.groupby("concentration"):
+            train_subset, test_subset = train_test_split(group_df, test_size=test_size)
             train_data = pd.concat([train_data, train_subset])
             test_data = pd.concat([test_data, test_subset])
         train_data = train_data.reset_index(drop=True)
