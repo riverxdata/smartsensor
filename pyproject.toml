@@ -15,7 +15,7 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.9"
 typer = ">=0.14.0"
 scikit-learn = ">=1.6.1"
 pandas = ">=1.5.3"
