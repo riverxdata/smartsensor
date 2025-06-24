@@ -1,5 +1,0 @@
-typer = ">=0.14.0"
-scikit-learn = ">=1.6.1"
-pandas = ">=1.5.3"
-opencv-python = ">=4.11.0.86"
-.
