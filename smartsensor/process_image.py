@@ -4,7 +4,9 @@ from smartsensor.process.features import get_features
 from smartsensor.logger import logger
 
 
-def process_image(data: str, outdir: str, kit: str = "1.1.0", lum=None) -> None:
+def process_image(
+    data: str, outdir: str, kit: str = "1.1.0", auto_lum: bool = False
+) -> None:
     """Processing image
 
     Args:
@@ -33,20 +35,13 @@ def process_image(data: str, outdir: str, kit: str = "1.1.0", lum=None) -> None:
 
     # balance
     logger.info("Balance image")
-    if lum:
-        logger.info(f"Use lum from argument:{lum}")
-        normalize(
-            raw_roi=raw_roi_path,
-            background=bg_path,
-            outdir=outdir,
-            lum=lum,
-        )
-    else:
-        normalize(
-            raw_roi=raw_roi_path,
-            background=bg_path,
-            outdir=outdir,
-        )
+    normalize(
+        raw_roi=raw_roi_path,
+        background=bg_path,
+        kit=kit,
+        outdir=outdir,
+        auto_lum=auto_lum,
+    )
 
     logger.info("Complete balance image")
     # extract features

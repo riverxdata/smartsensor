@@ -15,13 +15,14 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = ">=3.9"
 typer = ">=0.14.0"
 scikit-learn = ">=1.6.1"
 pandas = ">=1.5.3"
 opencv-python-headless = ">=4.11.0.86"
 streamlit = ">= 1.45.1"
-
+pyheif = ">=0.8.0"
+pillow = ">=11.3.0"
 [tool.poetry.scripts]
 smartsensor = "smartsensor.main:app"
 

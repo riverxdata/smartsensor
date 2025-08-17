@@ -40,7 +40,7 @@ def get_features(outdir: str) -> str:
             def safe_mode(channel):
                 try:
                     return st.mode(channel)
-                except:
+                except:  # noqa
                     return channel.iloc[0]  # fallback to first value
 
             rows.append(

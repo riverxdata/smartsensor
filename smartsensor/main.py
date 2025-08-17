@@ -1,3 +1,4 @@
+import os
 import typer
 from smartsensor.logger import logger
 from smartsensor.process_image import process_image
@@ -26,7 +27,7 @@ def model(
         help="Features used in model, separated by commas in string",
     ),
     skip_feature_selection: bool = typer.Option(
-        True,
+        False,
         "--skip-feature-selection",
         help="Skip feature selection",
     ),
@@ -38,7 +39,7 @@ def model(
     test_size: float = typer.Option(
         0.2, "--test-size", help="Test data size for splitting to train the model"
     ),
-    degree: int = typer.Option([2], "--degree", help="Degree of polynomial regression"),
+    degree: int = typer.Option([1], "--degree", help="Degree of polynomial regression"),
     replication: int = typer.Option(100, "--replication", help="Number of replication"),
     out: str = typer.Option(".", help="Folder to save model"),
 ):
@@ -55,7 +56,7 @@ def model(
     logger.info(f"Test size: {test_size}")
     logger.info(f"Degree: {degree}")
     logger.info(f"Output folder: {out}")
-
+    os.makedirs(out, exist_ok=True)
     end2end_pipeline(
         data=data,
         kit=kit,
@@ -79,11 +80,16 @@ def process(
         "1.1.0",
         help="The kit that has been used to capture image. By default, kit is used for ampiciline dataset",
     ),
+    auto_lum: bool = typer.Option(
+        False,
+        "--auto-lum",
+        help="Automatically calculate luminance from background images",
+    ),
 ):
     """
     Normalize the images to standardize RGB features.
     """
-    process_image(data=data, outdir=outdir, kit=kit)
+    process_image(data=data, outdir=outdir, kit=kit, auto_lum=auto_lum)
 
 
 @app.command()
