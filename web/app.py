@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 from PIL import Image
+from smartsensor.const import KITS
+from smartsensor.process.any2jpg import heic2jpg
 from smartsensor.process_image import process_image
 from smartsensor.e2e import end2end_pipeline
 from smartsensor.model.train import fit
@@ -56,7 +58,9 @@ with tab1:
     st.header("📤 Upload Raw Images")
 
     uploaded = st.file_uploader(
-        "Upload image(s)", type=["jpg", "jpeg", "png"], accept_multiple_files=True
+        "Upload image(s)",
+        type=["jpg", "jpeg", "png", "heic"],
+        accept_multiple_files=True,
     )
 
     if uploaded:
@@ -64,6 +68,15 @@ with tab1:
             save_path = os.path.join(UPLOAD_DIR, img_file.name)
             with open(save_path, "wb") as f:
                 f.write(img_file.getbuffer())
+
+        # Convert HEIC to JPG if necessary
+        if img_file.name.lower().endswith(".heic"):
+            heic_path = os.path.join(UPLOAD_DIR, img_file.name)
+            with open(heic_path, "wb") as f:
+                f.write(img_file.getbuffer())
+            heic2jpg(UPLOAD_DIR)
+            st.success(f"Converted {img_file.name} to JPG.")
+
         st.success(f"Uploaded {len(uploaded)} images.")
 
     # Check for clear request in session state
@@ -99,7 +112,7 @@ squared_frame_dir = os.path.join(PROCESSED_DIR, "squared_frame")
 # --- Tab 2: Process ---
 with tab2:
     st.header("🧪 Segment / Process Uploaded Images")
-    kit_version = st.selectbox("🧰 Select Kit Version", ["1.0.0", "1.1.0"], index=1)
+    kit_version = st.selectbox("🧰 Select Kit Version", KITS.keys(), index=0)
     if st.button("🚀 Process Images"):
         st.info(f"Processing with kit version {kit_version}...")
         try:
@@ -124,9 +137,7 @@ with tab2:
         clear_col, _ = st.columns([1, 9])
         with clear_col:
             if st.button("🗑️ Clear Processed Images"):
-                # Remove only files in squared_frame_dir
-                for f in processed_imgs:
-                    os.remove(os.path.join(squared_frame_dir, f))
+                shutil.rmtree(PROCESSED_DIR, ignore_errors=True)
                 st.success("✅ All processed images deleted.")
                 st.rerun()
 
@@ -144,7 +155,7 @@ with tab2:
 with tab3:
     st.header("🎓 Train Model (Prototype)")
     kit_version = st.selectbox(
-        "🧰 Select Kit Version", ["1.0.0", "1.1.0"], index=1, key="kit_version2"
+        "🧰 Select Kit Version", KITS.keys(), index=0, key="kit_version2"
     )
     normalize_method = st.selectbox(
         "🧪 Normalization Method",

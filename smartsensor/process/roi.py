@@ -31,7 +31,7 @@ def get_r2frame(
     os.makedirs(r2_path, exist_ok=True)
 
     # contour value
-    threshold = KITS[kit]
+    threshold = KITS[kit].get("threshold")
     low_val = threshold[0]
     high_val = threshold[1]
 
@@ -47,7 +47,7 @@ def get_r2frame(
         if not contours:
             raise ValueError("Your image does not have any countours")
         x, y, w, h = cv2.boundingRect(contours[0])
-        roi = image[y : y + h, x : x + w]
+        roi = image[y : y + h, x : x + w]  # noqa
         roi = cv2.resize(roi, (RESIZE_DIM, RESIZE_DIM), interpolation=cv2.INTER_AREA)
         cv2.imwrite(os.path.join(r2_path, file_name), roi)
     return r2_path
@@ -77,8 +77,8 @@ def get_roi_background(
         file_name = os.path.basename(image_location)
         # roi
         roi = image[
-            center - half_size : center + half_size,
-            center - half_size : center + half_size,
+            center - half_size : center + half_size,  # noqa
+            center - half_size : center + half_size,  # noqa
         ]
 
         cv2.imwrite(os.path.join(roi_path, file_name), roi)
@@ -87,6 +87,6 @@ def get_roi_background(
         )
 
         # background
-        background = image[center - half_size : center + half_size, 50:100]
+        background = image[center - half_size : center + half_size, 50:100]  # noqa
         cv2.imwrite(os.path.join(bg_path, file_name), background)
     return roi_path, bg_path
