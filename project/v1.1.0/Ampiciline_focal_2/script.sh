@@ -13,40 +13,40 @@ smartsensor process \
 # Modeling 1 degree
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix raw \
     --out "$OUTDIR/model/raw" \
     --kit $KIT \
     --norm "raw" \
     --degree 1 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
 
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix delta \
     --out "$OUTDIR/model/delta" \
     --kit $KIT \
     --norm "delta" \
     --degree 1 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
 
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix ratio \
     --out "$OUTDIR/model/ratio" \
     --kit $KIT \
     --norm "ratio" \
     --degree 1 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
 
@@ -54,39 +54,39 @@ smartsensor model \
 # Modeling 2 degree
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix raw \
     --out "$OUTDIR/model2/raw" \
     --kit $KIT \
     --norm "raw" \
     --degree 2 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
 
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix delta \
     --out "$OUTDIR/model2/delta" \
     --kit $KIT \
     --norm "delta" \
     --degree 2 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
 
 smartsensor model \
     --data "$OUTDIR/processed" \
-    --features "meanR,meanG,meanG,modeR,modeG,modeB" \
+    --features "meanR,meanG,meanB,modeR,modeG,modeB" \
     --skip-feature-selection \
     --prefix ratio \
     --out "$OUTDIR/model2/ratio" \
     --kit $KIT \
     --norm "ratio" \
     --degree 2 \
-    --replication 100 \
+    --replication 100  \
     --cv 5 \
     --test-size 0.2
