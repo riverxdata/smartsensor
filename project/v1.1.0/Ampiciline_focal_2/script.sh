@@ -22,7 +22,7 @@ smartsensor model \
     --degree 1 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
 
 smartsensor model \
     --data "$OUTDIR/processed" \
@@ -35,7 +35,7 @@ smartsensor model \
     --degree 1 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
 
 smartsensor model \
     --data "$OUTDIR/processed" \
@@ -48,7 +48,7 @@ smartsensor model \
     --degree 1 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
 
 
 # Modeling 2 degree
@@ -63,7 +63,7 @@ smartsensor model \
     --degree 2 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
 
 smartsensor model \
     --data "$OUTDIR/processed" \
@@ -76,7 +76,7 @@ smartsensor model \
     --degree 2 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
 
 smartsensor model \
     --data "$OUTDIR/processed" \
@@ -89,4 +89,4 @@ smartsensor model \
     --degree 2 \
     --replication 100  \
     --cv 5 \
-    --test-size 0.2
+    --test-size 0.3
