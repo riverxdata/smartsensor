@@ -16,6 +16,7 @@ def normalize(
     background: str,
     kit: str,
     outdir: str,
+    lum: list,
     auto_lum: bool = False,
 ) -> None:
     """Balance image
@@ -23,7 +24,11 @@ def normalize(
     Args:
         raw_roi (str): Path contains raw roi image
         background (str): Path contains background image
-        outdir (str):
+        kit (str): Kit version
+        outdir (str): Output directory
+        lum (list): List of luminance values
+        auto_lum (bool): Whether to automatically calculate luminance
+
     """
 
     result_path = os.path.join(outdir)
@@ -42,7 +47,7 @@ def normalize(
             for i in range(3):  # B=0, G=1, R=2
                 channels[i].append(np.mean(bg_img[:, :, i]))
         lum = [np.mean(c) for c in channels]
-    else:
+    elif not lum:
         lum = KITS.get(kit, {}).get("lum")
     logger.info(f"Processing raw roi image using lum: {lum}")
 
@@ -138,12 +143,6 @@ def normalize_ratio(
     ratioB = lum[0] / B
     ratioG = lum[1] / G
     ratioR = lum[2] / R
-    if (
-        math.log(ratioB, 2) > THRESHOLD_RATIO
-        or math.log(ratioG, 2) > THRESHOLD_RATIO
-        or math.log(ratioR, 2) > THRESHOLD_RATIO
-    ):
-        return True
 
     # Normalize the ROI image using the ratios
     ratio_normalized_roi = rgb2dataframe(roi_image)
@@ -166,6 +165,13 @@ def normalize_ratio(
     cv2.imwrite(tmp_file, tmp)
 
     logger.info(f"Normalize delta: {ratioB, ratioG, ratioR}")
+    if (
+        math.log(ratioB, 2) > THRESHOLD_RATIO
+        or math.log(ratioG, 2) > THRESHOLD_RATIO
+        or math.log(ratioR, 2) > THRESHOLD_RATIO
+    ):
+        return True
+
     return False
 
 
@@ -187,12 +193,6 @@ def normalize_delta(
     deltaB = lum[0] - B
     deltaG = lum[1] - G
     deltaR = lum[2] - R
-    if (
-        abs(deltaB) > THRESHOLD_DELTA
-        or abs(deltaG) > THRESHOLD_DELTA
-        or abs(deltaR) > THRESHOLD_DELTA
-    ):
-        return True
 
     tmp = roi_image
     tmp[:, :, 0] + deltaB
@@ -218,4 +218,12 @@ def normalize_delta(
     cv2.imwrite(tmp_file, tmp)
 
     logger.info(f"Normalize delta: {deltaB, deltaG, deltaR}")
+
+    if (
+        abs(deltaB) > THRESHOLD_DELTA
+        or abs(deltaG) > THRESHOLD_DELTA
+        or abs(deltaR) > THRESHOLD_DELTA
+    ):
+        return True
+
     return False

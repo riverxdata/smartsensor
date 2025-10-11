@@ -5,14 +5,17 @@ from smartsensor.logger import logger
 
 
 def process_image(
-    data: str, outdir: str, kit: str = "1.1.0", auto_lum: bool = False
+    data: str, outdir: str, lum: list, kit: str = "1.1.0", auto_lum: bool = False
 ) -> None:
     """Processing image
 
     Args:
         data (str): Path to the image or folder of raw images
         outdir (str): Folder to save processed images
+        lum (list, optional): List of luminance values. Defaults to [].
         kit (str, optional): Kit version to get relative threshol. Defaults to "1.1.0".
+        auto_lum: (bool, optional): Automatically calculate luminance from background images. Defaults to False.
+
 
     """
     # get frame
@@ -41,6 +44,7 @@ def process_image(
         kit=kit,
         outdir=outdir,
         auto_lum=auto_lum,
+        lum=lum,
     )
 
     logger.info("Complete balance image")
