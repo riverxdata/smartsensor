@@ -51,7 +51,7 @@ def end2end_pipeline(
                 skip_feature_selection=skip_feature_selection,
                 cv=cv,
                 outdir=outdir,
-                prefix=prefix,
+                prefix=f"train_only_{prefix}",
             )
             # Evaluate
             train_metric, _ = evaluate_metrics(

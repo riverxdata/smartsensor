@@ -1,9 +1,11 @@
 import os
 import typer
+import json
 from smartsensor.logger import logger
 from smartsensor.process_image import process_image
 from smartsensor.e2e import end2end_pipeline
 from smartsensor.predict import predict_new_data
+from smartsensor.process.any2jpg import heic2jpg as convert_heic_to_jpg
 
 
 app = typer.Typer(
@@ -74,8 +76,17 @@ def model(
 
 @app.command()
 def process(
-    data: str = typer.Option(help="Path to the image or folder of raw images"),
-    outdir: str = typer.Option(".", help="Folder to save processed images"),
+    data: str = typer.Option(
+        help="Path to the image or folder of raw images",
+    ),
+    outdir: str = typer.Option(
+        ".",
+        help="Folder to save processed images",
+    ),
+    process_dir: str = typer.Option(
+        "--process-dir",
+        help="Path to the processed to get config for base background color",
+    ),
     kit: str = typer.Option(
         "1.1.0",
         help="The kit that has been used to capture image. By default, kit is used for ampiciline dataset",
@@ -89,26 +100,46 @@ def process(
     """
     Normalize the images to standardize RGB features.
     """
-    process_image(data=data, outdir=outdir, kit=kit, auto_lum=auto_lum)
+    lum = None
+    if process_dir:
+        with open(os.path.join(process_dir, "config.json"), "r") as f:
+            process_config = json.load(f)
+            lum = process_config.get("lum")
+
+    process_image(
+        data=data,
+        outdir=outdir,
+        kit=kit,
+        auto_lum=auto_lum,
+        lum=lum,
+    )
+
+
+@app.command()
+def heic2jpg(
+    data: str = typer.Option(help="Path to the image or folder of raw images"),
+):
+    """
+    Convert HEIC images to JPG format.
+    """
+    convert_heic_to_jpg(folder_path=data)
 
 
 @app.command()
 def predict(
-    process_dir: str = typer.Option(
-        "--process-dir",
+    processed_dir: str = typer.Option(
+        "--processed-dir",
         help="Path to the processed to get config for base background color",
     ),
     model_dir: str = typer.Option("--model-dir", help="Path to the model result"),
-    images: str = typer.Option("--images", help="Path to the images"),
     outdir: str = typer.Option("--outdir", help="Path to the output directory"),
 ):
     """
     Normalize the images to standardize RGB features.
     """
     predict_new_data(
-        process_dir=process_dir,
+        processed_dir=processed_dir,
         model_dir=model_dir,
-        new_data=images,
         outdir=outdir,
     )
 
