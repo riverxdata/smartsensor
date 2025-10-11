@@ -5,7 +5,7 @@ from smartsensor.logger import logger
 
 
 def process_image(
-    data: str, outdir: str, lum: list, kit: str = "1.1.0", auto_lum: bool = False
+    data: str, outdir: str, lum: list = [], kit: str = "1.1.0", auto_lum: bool = False
 ) -> None:
     """Processing image
 

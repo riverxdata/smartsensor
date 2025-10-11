@@ -77,7 +77,6 @@ def model(
 @app.command()
 def process(
     data: str = typer.Option(
-        None,
         help="Path to the image or folder of raw images",
     ),
     outdir: str = typer.Option(
@@ -85,7 +84,6 @@ def process(
         help="Folder to save processed images",
     ),
     process_dir: str = typer.Option(
-        None,
         "--process-dir",
         help="Path to the processed to get config for base background color",
     ),

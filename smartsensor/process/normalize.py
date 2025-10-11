@@ -195,9 +195,9 @@ def normalize_delta(
     deltaR = lum[2] - R
 
     tmp = roi_image
-    tmp[:, :, 0] + deltaB
-    tmp[:, :, 1] + deltaG
-    tmp[:, :, 2] + deltaR
+    tmp[:, :, 0] += deltaB
+    tmp[:, :, 1] += deltaG
+    tmp[:, :, 2] += deltaR
 
     # Adjust the ROI image using the deltas
     delta_normalized_roi = rgb2dataframe(roi_image)
