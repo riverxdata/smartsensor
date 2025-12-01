@@ -11,7 +11,7 @@ def evaluate_metrics(
     data: DataFrame,
     features: List,
     degree: int,
-) -> tuple[DataFrame]:
+) -> tuple[DataFrame, DataFrame]:
     """Simple evaluation matrics for measure the errors
 
     Args:
