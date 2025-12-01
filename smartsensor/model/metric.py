@@ -11,7 +11,7 @@ def evaluate_metrics(
     data: DataFrame,
     features: List,
     degree: int,
-) -> (DataFrame, DataFrame):
+) -> tuple[DataFrame, DataFrame]:
     """Simple evaluation matrics for measure the errors
 
     Args:
@@ -41,12 +41,8 @@ def evaluate_metrics(
     detail = detail.T
     detail.columns = ["image", "expected_concentration", "predicted_concentration"]
     detail = detail.sort_values("expected_concentration")
-    detail["absolute_error"] = abs(
-        detail["predicted_concentration"] - detail["expected_concentration"]
-    )
-    detail["error"] = (
-        detail["predicted_concentration"] - detail["expected_concentration"]
-    )
+    detail["absolute_error"] = abs(detail["predicted_concentration"] - detail["expected_concentration"])
+    detail["error"] = detail["predicted_concentration"] - detail["expected_concentration"]
 
     return (metric, detail)
 

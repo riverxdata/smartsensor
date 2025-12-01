@@ -8,9 +8,7 @@ from smartsensor.predict import predict_new_data
 from smartsensor.process.any2jpg import heic2jpg as convert_heic_to_jpg
 
 
-app = typer.Typer(
-    help="Smart Optical Sensor: Using smartphone camera as sensor", add_completion=False
-)
+app = typer.Typer(help="Smart Optical Sensor: Using smartphone camera as sensor", add_completion=False)
 
 
 @app.command()
@@ -38,12 +36,11 @@ def model(
         "--cv",
         help="Fold for cross validation",
     ),
-    test_size: float = typer.Option(
-        0.2, "--test-size", help="Test data size for splitting to train the model"
-    ),
+    test_size: float = typer.Option(0.2, "--test-size", help="Test data size for splitting to train the model"),
     degree: int = typer.Option([1], "--degree", help="Degree of polynomial regression"),
     replication: int = typer.Option(100, "--replication", help="Number of replication"),
     out: str = typer.Option(".", help="Folder to save model"),
+    seed: int = typer.Option(1, "--seed", help="Random seed for reproducibility"),
 ):
     """
     Run the end-to-end model for Smart Optical Sensor.
@@ -58,6 +55,7 @@ def model(
     logger.info(f"Test size: {test_size}")
     logger.info(f"Degree: {degree}")
     logger.info(f"Output folder: {out}")
+    logger.info(f"Random seed: {seed}")
     os.makedirs(out, exist_ok=True)
     end2end_pipeline(
         data=data,
@@ -71,6 +69,7 @@ def model(
         prefix=prefix,
         test_size=test_size,
         replication=replication,
+        seed=seed,
     )
 
 
@@ -84,6 +83,7 @@ def process(
         help="Folder to save processed images",
     ),
     process_dir: str = typer.Option(
+        None,
         "--process-dir",
         help="Path to the processed to get config for base background color",
     ),
