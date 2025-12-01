@@ -9,22 +9,21 @@ def split_data(
     prefix: str,
     test_size: float = 0.2,
 ):
-    """It will combine the features and metadata, split to prepare for training and testing
+    """It will combine the features and metadata, split to prepare for training and testing according to concentration.
 
     Args:
         meta_data(pd.DataFrame): The dataframe with data and metadata
         outdir (str): The output directory for train and test csv file
         prefix (str): The prefix to specify csv file
-        random_state (int, optional): To reproduce split. Defaults to 1.
         test_size (float, optional): The test size if train, test batch is not specified. Defaults to 0.2.
     """
-    # train test split data
+    # Train test split data
     # Define train and test data holders
     train_data = pd.DataFrame()
     test_data = pd.DataFrame()
     # split dataset by batch equally
     if test_size != 0:
-        for dataset_name, group_df in meta_data.groupby("concentration"):
+        for _, group_df in meta_data.groupby("concentration"):
             train_subset, test_subset = train_test_split(group_df, test_size=test_size)
             train_data = pd.concat([train_data, train_subset])
             test_data = pd.concat([test_data, test_subset])

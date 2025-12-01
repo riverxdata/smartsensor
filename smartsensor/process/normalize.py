@@ -54,9 +54,7 @@ def normalize(
     with open(os.path.join(outdir, "config.json"), "w") as f:
         json.dump({"lum": lum}, f)
 
-    with open(failed_ratio_file, "w") as f_ratio, open(
-        failed_delta_file, "w"
-    ) as f_delta:
+    with open(failed_ratio_file, "w") as f_ratio, open(failed_delta_file, "w") as f_delta:
         f_ratio.write("image\n")
         f_delta.write("image\n")
 
@@ -64,9 +62,7 @@ def normalize(
             file_name = os.path.basename(image_location)
             background_image_path = os.path.join(background, file_name)
             if not os.path.exists(background_image_path):
-                raise ValueError(
-                    f"Background image {background_image_path} does not exist."
-                )
+                raise ValueError(f"Background image {background_image_path} does not exist.")
             raw_roi_img = cv2.imread(image_location)
             background_img = cv2.imread(background_image_path)
             logger.info(
@@ -194,7 +190,7 @@ def normalize_delta(
     deltaG = lum[1] - G
     deltaR = lum[2] - R
 
-    tmp = roi_image
+    tmp = roi_image.astype(np.float64)
     tmp[:, :, 0] += deltaB
     tmp[:, :, 1] += deltaG
     tmp[:, :, 2] += deltaR
@@ -219,11 +215,7 @@ def normalize_delta(
 
     logger.info(f"Normalize delta: {deltaB, deltaG, deltaR}")
 
-    if (
-        abs(deltaB) > THRESHOLD_DELTA
-        or abs(deltaG) > THRESHOLD_DELTA
-        or abs(deltaR) > THRESHOLD_DELTA
-    ):
+    if abs(deltaB) > THRESHOLD_DELTA or abs(deltaG) > THRESHOLD_DELTA or abs(deltaR) > THRESHOLD_DELTA:
         return True
 
     return False
