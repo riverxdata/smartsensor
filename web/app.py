@@ -28,9 +28,7 @@ FAKE_CLASSES = ["class A", "class B", "class C"]
 st.set_page_config(page_title="SmartSensor Prototype", layout="wide")
 st.title("🧠 SmartSensor ML UI Prototype")
 
-tab1, tab2, tab3, tab4 = st.tabs(
-    ["📤 Upload Images", "🧪 Process Images", "🎓 Train Model", "🔮 Predict"]
-)
+tab1, tab2, tab3, tab4 = st.tabs(["📤 Upload Images", "🧪 Process Images", "🎓 Train Model", "🔮 Predict"])
 
 
 def load_and_resize(path: str, max_size=(256, 256)) -> Image.Image:
@@ -41,9 +39,7 @@ def load_and_resize(path: str, max_size=(256, 256)) -> Image.Image:
 
 def zip_folder_to_buffer(folder_path: str) -> io.BytesIO:
     zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(
-        zip_buffer, mode="w", compression=zipfile.ZIP_DEFLATED
-    ) as zipf:
+    with zipfile.ZipFile(zip_buffer, mode="w", compression=zipfile.ZIP_DEFLATED) as zipf:
         for root, _, files in os.walk(folder_path):
             for file in files:
                 file_path = os.path.join(root, file)
@@ -124,9 +120,7 @@ with tab2:
 
     # Only list images if directory exists
     if os.path.isdir(squared_frame_dir):
-        processed_imgs = [
-            f for f in os.listdir(squared_frame_dir) if f.lower().endswith(IMAGE_EXT)
-        ]
+        processed_imgs = [f for f in os.listdir(squared_frame_dir) if f.lower().endswith(IMAGE_EXT)]
     else:
         processed_imgs = []
 
@@ -154,9 +148,7 @@ with tab2:
 # --- Tab 3: Train ---
 with tab3:
     st.header("🎓 Train Model (Prototype)")
-    kit_version = st.selectbox(
-        "🧰 Select Kit Version", KITS.keys(), index=0, key="kit_version2"
-    )
+    kit_version = st.selectbox("🧰 Select Kit Version", KITS.keys(), index=0, key="kit_version2")
     normalize_method = st.selectbox(
         "🧪 Normalization Method",
         ["raw", "ratio", "delta"],
@@ -164,15 +156,11 @@ with tab3:
         key="train_norm_method",
     )
 
-    degree = st.selectbox(
-        "📐 Polynomial Degree", ["1", "2"], index=0, key="train_degree"
-    )
+    degree = st.selectbox("📐 Polynomial Degree", ["1", "2"], index=0, key="train_degree")
 
     cv = st.slider("🔁 Cross Validation Folds", 2, 10, 5, key="train_cv")
 
-    test_size = st.slider(
-        "🧪 Test Size (fraction)", 0.1, 0.5, 0.2, 0.1, key="train_test_size"
-    )
+    test_size = st.slider("🧪 Test Size (fraction)", 0.1, 0.5, 0.2, 0.1, key="train_test_size")
     skip_fs = st.checkbox("🚫 Skip Feature Selection", value=True, key="train_skip_fs")
 
     replication = st.slider("Replication ", 100, 1000, 100, 100, key="replication")
@@ -262,8 +250,7 @@ with tab4:
     existing_images = [
         f
         for f in sorted(os.listdir(PREDICTED_DIR))
-        if os.path.isfile(os.path.join(PREDICTED_DIR, f))
-        and f.lower().endswith(("jpg", "jpeg", "png"))
+        if os.path.isfile(os.path.join(PREDICTED_DIR, f)) and f.lower().endswith(("jpg", "jpeg", "png"))
     ]
 
     if existing_images:
@@ -284,11 +271,13 @@ with tab4:
         else:
             with st.spinner("🧠 Processing and predicting..."):
                 try:
+                    # Process images first
+                    process_image(data=PREDICTED_DIR, outdir=PREDICTED_DIR, kit=kit_version)
 
+                    # Then predict
                     df = predict_new_data(
                         model_dir=os.path.join(RESULT_DIR, models),
-                        process_dir=PROCESSED_DIR,
-                        new_data=PREDICTED_DIR,
+                        processed_dir=PREDICTED_DIR,
                         outdir=PREDICTED_DIR,
                     )
                     # Show squared_frame output images
@@ -306,9 +295,7 @@ with tab4:
                                 img_path = os.path.join(squared_frame_path, name)
                                 img = load_and_resize(img_path)
                                 with cols[i % 10]:
-                                    st.image(
-                                        img, caption=name, use_container_width=True
-                                    )
+                                    st.image(img, caption=name, use_container_width=True)
 
                     st.success("✅ Prediction completed!")
                     st.subheader("📊 Prediction Results")
