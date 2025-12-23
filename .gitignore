@@ -20,4 +20,6 @@ __pycache__
 env
 data
 project
-!project/*.sh
+!project/*.sh# pixi environments
+.pixi/*
+!.pixi/config.toml

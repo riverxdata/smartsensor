@@ -3,6 +3,7 @@ from smartsensor.model.split_data import split_data
 from smartsensor.model.train import fit
 from smartsensor.model.metric import evaluate_metrics, aggregate_replication_metrics
 import pandas as pd
+import numpy as np
 import os
 import tempfile
 import warnings
@@ -23,7 +24,10 @@ def end2end_pipeline(
     prefix: str,
     test_size: float = 0.2,
     replication: int = 1000,
+    seed: int = 1,
 ):
+    # set seed for reproducibility
+    np.random.seed(seed)
 
     metrics = []
     features = features.split(",")
