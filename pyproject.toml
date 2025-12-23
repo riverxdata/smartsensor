@@ -1,7 +1,7 @@
 [project]
 dependencies = ["scikit-learn>=1.7.2,<2", "typer>=0.14.0", "pandas>=1.5.3", "opencv-python-headless>=4.11.0.86", "pyheif>=0.8.0", "pillow>=11.3.0"]
 name = "smartsensor"
-requires-python = ">= 3.11"
+requires-python = ">=3.9"
 version = "1.1.0"
 
 [build-system]
