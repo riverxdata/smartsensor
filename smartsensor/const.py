@@ -8,10 +8,10 @@ THRESHOLD_RATIO = math.log(1.3, 2)  # log to get diff fold change
 
 # kit with relative bound color
 KITS = {
-    "1.2.0": {
-        "threshold": [(60, 60, 100), (250, 250, 200)],
-        "lum": [100, 100, 100],
-    },  # purple color
+    # "1.2.0": {
+    #     "threshold": [(60, 60, 100), (250, 250, 200)],
+    #     "lum": [100, 100, 100],
+    # },  # purple color
     "1.1.0": {
         "threshold": [(35, 40, 40), (85, 255, 255)],
         "lum": [210, 190, 185],
