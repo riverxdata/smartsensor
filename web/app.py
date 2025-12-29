@@ -227,7 +227,7 @@ with tab4:
     st.header("🔮 Predict")
     kit_version = st.selectbox("🧰 Select Kit Version", KITS.keys(), index=0, key="kit_version4")
     models = [f for f in os.listdir(RESULT_DIR) if f != ".gitignore"]
-    models = st.selectbox("🧰 Select Kit Version", models, index=0, key="models")
+    models = st.selectbox("🤖 Select Trained Model", models, index=0, key="models")
     predict_files = st.file_uploader(
         "Upload image(s) to predict",
         type=["jpg", "jpeg", "png"],
