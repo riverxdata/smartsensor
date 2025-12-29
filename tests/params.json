@@ -1,0 +1,21 @@
+{
+  "name": "Thanh-Giang Tan Nguyen 09/07/2025 11:05:01 PM",
+  "cpu": 1,
+  "memory": 2,
+  "time": 3600,
+  "tag": "4.4.2-3",
+  "profile": "",
+  "git": "valid_git_repo",
+  "bucket_name": "genomics",
+  "AWS_ACCESS_KEY_ID": "invalid",
+  "AWS_SECRET_ACCESS_KEY": "invalid",
+  "AWS_REGION_NAME": "invalid",
+  "AWS_ENDPOINT_URL": "invalid",
+  "file": "workspace/test.txt",
+  "dir": "workspace",
+  "integer": 1,
+  "number": 0.3,
+  "string": "string1",
+  "boolean": true,
+  "outdir": "batch-template-analysis"
+}
